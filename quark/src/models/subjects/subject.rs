@@ -20,16 +20,6 @@ pub enum Sex {
     Female,
 }
 
-impl Sex {
-    pub fn from_str_value(input: &str) -> Self {
-        match input {
-            "Male" => Self::Male,
-            "Female" => Self::Female,
-            _ => Self::Male,
-        }
-    }
-}
-
 #[derive(
     Debug, 
     Clone, 
