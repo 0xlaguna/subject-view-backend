@@ -1,0 +1,11 @@
+[package]
+name = "subject-view-app"
+version = "0.1.0"
+authors = ["Maykol Laguna <lagunamichael2@outlook.com>"]
+edition = "2021"
+
+[workspace]
+members = [".", "orbit"]
+
+[dependencies]
+subject-view-orbit = { path = "orbit" }
