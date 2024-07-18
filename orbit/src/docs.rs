@@ -4,6 +4,7 @@ use utoipa::{Modify, OpenApi};
 use crate::routes::account::login::{DataLoginAccount, LoginResponse, self};
 use crate::routes::users::create_user::{DataCreateAccount, self};
 use crate::routes::subject::create_subject::{DataCreateSubject, self};
+use crate::routes::subject::list_subject::{SubjectListData, SubjectItem, self};
 
 
 #[derive(OpenApi)]
@@ -12,11 +13,13 @@ use crate::routes::subject::create_subject::{DataCreateSubject, self};
         login::req,
         create_user::req,
         create_subject::req,
+        list_subject::req,
     ),
     components(
         schemas(DataLoginAccount, LoginResponse),
         schemas(DataCreateAccount),
         schemas(DataCreateSubject),
+        schemas(SubjectListData, SubjectItem)
     ),
     tags(
         (name = "SubjectView", description = "SubjectView endpoints")
