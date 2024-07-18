@@ -17,12 +17,16 @@ pub mod docs;
 pub mod cors;
 
 
+#[options("/<_..>")]
+fn all_options() { }
+
 #[tokio::main]
 async fn start()  -> Result<(), rocket::Error> {
     let rocket = rocket::build()
         .attach(Db::init())
         .attach(Template::fairing())
         .attach(cors::Cors)
+        .mount("/", routes![all_options])
         .mount(
             "/",
             SwaggerUi::new("/swagger-ui/<_..>").url("/api-docs/openapi.json", docs::ApiDoc::openapi()),
