@@ -73,12 +73,15 @@ impl From<(Vec<subject::Model>, u64)> for SubjectListData {
         (status = 200, description = "List returned", body = SubjectListData),
     ),
 )]
-#[get("/?<page>&<per_page>")]
+#[get("/?<page>&<per_page>&<search>&<sort_by>&<order>")]
 pub async fn req(
     conn: Connection<'_, Db>, 
     mut _session: Session, 
     page: Option<u64>, 
-    per_page: Option<u64>
+    per_page: Option<u64>,
+    search: Option<String>,
+    sort_by: Option<String>,
+    order: Option<String>
 ) -> Result<Json<SubjectListData>> { 
     let db = conn.into_inner();
 
@@ -86,7 +89,7 @@ pub async fn req(
     let per_page = per_page.unwrap_or(4);
     
     let subjects = AbstractSubject
-        ::subject_pagination(db, page, per_page).await?;
+        ::subject_pagination(db, page, per_page, search, sort_by, order).await?;
 
     let response: SubjectListData = subjects.into();
 

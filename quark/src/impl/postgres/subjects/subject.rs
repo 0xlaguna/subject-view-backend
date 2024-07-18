@@ -8,6 +8,7 @@ use crate::models::subject::{
 use chrono::{FixedOffset, Utc};
 use sea_orm::entity::prelude::*;
 use sea_orm::*;
+use sea_query::extension::postgres::PgExpr;
 
 use crate::{Result, Error};
 
@@ -55,9 +56,37 @@ impl AbstractSubject {
     }
 
     /// Paginate subjects
-    pub async fn subject_pagination(db: &DbConn, page: u64, subject_per_page: u64) -> Result<(Vec<SubjectModel>, u64)> { 
+    pub async fn subject_pagination(
+        db: &DbConn, 
+        page: u64, 
+        subject_per_page: u64, 
+        search: Option<String>,
+        sort_by: Option<String>,
+        order: Option<String>
+    ) -> Result<(Vec<SubjectModel>, u64)> { 
         let paginator = SubjectEntity::find()
-            .order_by_desc(subject::Column::CreatedAt)
+            .apply_if(search, |query, v| {
+                query.filter(Expr::col(subject::Column::Name).ilike(format!("{}%", v)))
+            })
+            .apply_if(sort_by, |query, v | {
+                let order_value = order.unwrap_or_else(|| "desc".to_owned());
+
+                let sort_order = match order_value.as_str() {
+                    "asc" => Order::Asc,
+                    _ => Order::Desc,
+                };
+
+                let column = match v.as_str() {
+                    "name" => subject::Column::Name,
+                    "sex" => subject::Column::Sex,
+                    "diagnosis_date" => subject::Column::DiagnosisDate,
+                    "status" => subject::Column::Status,
+                    "created_at" => subject::Column::CreatedAt,
+                    _ => subject::Column::Id,
+                };
+
+                query.order_by(column, sort_order)
+            })
             .paginate(db, subject_per_page);
 
         let num_pages = paginator
