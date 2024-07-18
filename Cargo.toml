@@ -5,7 +5,7 @@ authors = ["Maykol Laguna <lagunamichael2@outlook.com>"]
 edition = "2021"
 
 [workspace]
-members = [".", "orbit", "migrator"]
+members = [".", "orbit", "migrator", "quark"]
 
 [dependencies]
 subject-view-orbit = { path = "orbit" }

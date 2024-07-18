@@ -27,6 +27,11 @@ validator = { version = "0.16.1", features = ["derive"] }
 tokio = "1.20.0"
 dotenvy = "0.15"
 
+# Migrations
+migrator = { path = "../migrator" }
+# preon
+subject-quark = { path = "../quark" }
+
 # Utility
 lru = "0.12.1"
 url = "2.2.2"
