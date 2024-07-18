@@ -8,6 +8,12 @@ pub use sea_orm;
 
 pub mod util;
 
+pub mod r#impl;
+
 pub mod auth;
+
+pub mod models;
+
+pub mod derive;
 
 pub use util::result::{Error, Result};
