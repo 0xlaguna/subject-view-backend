@@ -3,5 +3,5 @@ aptPkgs = ["...", "clang", "lld"]
 nixPkgs = ["...", "sea-orm-cli"]
 
 [phases.release]
-cmds = ["sea-orm-cli migrate -d ./altera"]
+cmds = ["sea-orm-cli migrate -d ./migrator"]
 dependsOn = ["build"]
