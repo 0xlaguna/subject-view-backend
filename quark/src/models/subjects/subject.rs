@@ -12,7 +12,7 @@ use sea_orm::entity::prelude::*;
     Deserialize,
     Serialize
 )]
-#[sea_orm(rs_type = "String", db_type = "String(Some(1))")]
+#[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "sex_type")]
 pub enum Sex {
     #[sea_orm(string_value = "Male")]
     Male,
@@ -40,7 +40,7 @@ impl Sex {
     Deserialize,
     Serialize
 )]
-#[sea_orm(rs_type = "String", db_type = "String(Some(1))")]
+#[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "status_type")]
 pub enum Status {
     #[sea_orm(string_value = "InScreening")]
     InScreening,
