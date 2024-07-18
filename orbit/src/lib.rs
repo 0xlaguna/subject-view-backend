@@ -3,7 +3,7 @@ extern crate rocket;
 
 use rocket_dyn_templates::Template;
 
-use rocket_cors::{AllowedOrigins, CorsOptions};
+use rocket_cors::{AllowedHeaders, AllowedOrigins, CorsOptions};
 use sea_orm_rocket::Database;
 use std::str::FromStr;
 
@@ -21,11 +21,10 @@ pub mod docs;
 
 #[tokio::main]
 async fn start()  -> Result<(), rocket::Error> {
-    let rocket = rocket::build();
-
     // Configure CORS
     let cors = CorsOptions {
         allowed_origins: AllowedOrigins::All,
+        allowed_headers: AllowedHeaders::All,
         allowed_methods: [
             "Get", "Put", "Post", "Delete", "Options", "Head", "Trace", "Connect", "Patch",
         ]
@@ -37,7 +36,10 @@ async fn start()  -> Result<(), rocket::Error> {
     .to_cors()
     .expect("Failed to create CORS.");
 
-    routes::mount(rocket)
+    let rocket = rocket::build()
+        .attach(Db::init())
+        .attach(Template::fairing())
+        .attach(cors.clone())
         .mount(
             "/",
             SwaggerUi::new("/swagger-ui/<_..>").url("/api-docs/openapi.json", docs::ApiDoc::openapi()),
@@ -45,12 +47,13 @@ async fn start()  -> Result<(), rocket::Error> {
         .mount("/", RapiDoc::new("/api-docs/openapi.json").path("/rapidoc"))
         .mount("/", Redoc::with_url("/redoc", docs::ApiDoc::openapi()))
         .mount("/", Scalar::with_url("/scalar", docs::ApiDoc::openapi()))
-        .attach(Db::init())
-        .attach(Template::fairing())
-        .manage(cors.clone())
+        .manage(cors.clone());
+
+    routes::mount(rocket)
         .launch()
         .await
         .map(|_| ())
+
 }
 
 pub fn main() {
