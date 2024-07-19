@@ -6,6 +6,7 @@ use crate::routes::users::create_user::{DataCreateAccount, self};
 use crate::routes::subject::create_subject::{DataCreateSubject, self};
 use crate::routes::subject::list_subject::{SubjectListData, SubjectItem, self};
 use crate::routes::users::me::{UserGetMeData, self};
+use crate::routes::subject::delete_subject::{self};
 
 #[derive(OpenApi)]
 #[openapi(
@@ -13,6 +14,7 @@ use crate::routes::users::me::{UserGetMeData, self};
         login::req,
         create_user::req,
         create_subject::req,
+        delete_subject::req,
         list_subject::req,
         me::req,
     ),

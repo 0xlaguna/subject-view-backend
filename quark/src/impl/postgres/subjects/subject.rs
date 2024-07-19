@@ -55,6 +55,21 @@ impl AbstractSubject {
         Ok(subject)
     }
 
+    /// Delete subject
+    pub async fn delete_subject(db: &DbConn, id: i32) -> Result<()> {
+        let _res: DeleteResult = SubjectEntity
+            ::delete_by_id(id)
+            .exec(db)
+            .await
+            .map_err(|e| Error::DatabaseError { 
+                operation: "delete_subject", 
+                with: "sessions",
+                info: e.to_string()
+            })?;
+
+        Ok(())
+    }
+
     /// Paginate subjects
     pub async fn subject_pagination(
         db: &DbConn, 
