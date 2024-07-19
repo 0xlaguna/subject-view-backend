@@ -5,7 +5,7 @@ use crate::routes::account::login::{DataLoginAccount, LoginResponse, self};
 use crate::routes::users::create_user::{DataCreateAccount, self};
 use crate::routes::subject::create_subject::{DataCreateSubject, self};
 use crate::routes::subject::list_subject::{SubjectListData, SubjectItem, self};
-
+use crate::routes::users::me::{UserGetMeData, self};
 
 #[derive(OpenApi)]
 #[openapi(
@@ -14,12 +14,14 @@ use crate::routes::subject::list_subject::{SubjectListData, SubjectItem, self};
         create_user::req,
         create_subject::req,
         list_subject::req,
+        me::req,
     ),
     components(
         schemas(DataLoginAccount, LoginResponse),
         schemas(DataCreateAccount),
         schemas(DataCreateSubject),
-        schemas(SubjectListData, SubjectItem)
+        schemas(SubjectListData, SubjectItem),
+        schemas(UserGetMeData),
     ),
     tags(
         (name = "SubjectView", description = "SubjectView endpoints")
