@@ -20,6 +20,7 @@ impl AbstractSubject {
         db: &DbConn,
         name: String,
         sex: String,
+        status: String,
         diagnosis_date: DateTimeWithTimeZone
     ) -> Result<SubjectModel> {
 
@@ -33,13 +34,20 @@ impl AbstractSubject {
                 info: e.to_string()
             })?;
 
+        let status_value = Status::try_from_value(&status)
+            .map_err(|e| Error::DatabaseError { 
+                operation: "create_subject", 
+                with: "sessions",
+                info: e.to_string()
+            })?;
+
         let subject = SubjectActiveModel {
             id: NotSet,
             name: Set(name),
             sex: Set(sex_value),
             diagnosis_date: Set(diagnosis_date),
             created_at: Set(now_utc),
-            status: Set(Status::InScreening),
+            status: Set(status_value),
             updated_at: NotSet
         };
 

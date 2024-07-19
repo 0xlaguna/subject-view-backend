@@ -18,6 +18,9 @@ pub struct DataCreateSubject {
     /// Sex
     pub sex: String,
 
+    /// Status
+    pub status: String,
+
     /// Diagnosis Date
     pub diagnosis_date: DateTimeWithTimeZone,
 
@@ -42,6 +45,7 @@ pub async fn req(conn: Connection<'_, Db>, mut _session: Session, data: Json<Dat
             db,
             data.name, 
             data.sex,
+            data.status,
             data.diagnosis_date,
         ).await?;
 
